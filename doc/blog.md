@@ -26,7 +26,8 @@
 - [Conclusion](#conclusion)
   - [Benefits of containers](#benefits-of-containers)
   - [Benefits of Container Orchestration services (ECS, Kubernetes, etc)](#benefits-of-container-orchestration-services-ecs-kubernetes-etc)
-- [5. References](#5-references)
+- [5. Acknowledgement](#5-acknowledgement)
+- [6. References](#6-references)
 
 ## 1. Introduction
 
@@ -344,7 +345,11 @@ To sum it all up, here are all the benefits of containers and container orchestr
 
 9. **Multi-Cloud and Hybrid Deployments**: Orchestrators enable multi-cloud and hybrid cloud deployments, allowing you to run containers in various environments while maintaining consistent management and orchestration.
 
-## 5. References
+## 5. Acknowledgement
+
+I would like to express my immense gratitude to the [UBC Cloud Innovation Centre](https://cic.ubc.ca/) for the valuable opportunities to learn more about AWS. This work would not have been possible without their guidance and support!
+
+## 6. References
 
 1. https://collabnix.com/how-docker-for-mac-works-under-the-hood/
 2. https://developer.ibm.com/articles/true-benefits-of-moving-to-containers-1/
