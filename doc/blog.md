@@ -117,7 +117,7 @@ Docker/Docker Desktop is the software that allow you to create, manage and run c
 
 If you want to follow hands-on this tutorial, make sure you have [Docker Desktop](https://docs.docker.com/engine/install/) installed. Docker Desktop will install the Docker engine (the brain behind this operation) and a nice desktop GUI. Make sure you have [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed while you're at it if you haven't already.
 
-You can clone the demo repository here `nhantien/fast-api-container-demo`.
+You can clone the [demo repository](https://github.com/nhantien/fast-api-container-demo) here `nhantien/fast-api-container-demo`.
 
 Directory structure:
 
