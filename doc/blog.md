@@ -24,11 +24,10 @@
     - [Step 5: Start a Service](#step-5-start-a-service)
     - [Step 6: Access the newly deployed API](#step-6-access-the-newly-deployed-api)
     - [Step 7: Cleaning Up](#step-7-cleaning-up)
-  - [Congratulation!!!](#congratulation)
   - [Good to know:](#good-to-know)
 - [Conclusion](#conclusion)
   - [Benefits of containers](#benefits-of-containers)
-  - [Benefits of Container Orchestration services (ECS, Kubernetes, etc.)](#benefits-of-container-orchestration-services-ecs-kubernetes-etc)
+  - [Benefits of Container Orchestration services (ECS, etc.)](#benefits-of-container-orchestration-services-ecs-etc)
 - [5. Acknowledgment](#5-acknowledgment)
 - [6. References](#6-references)
 
@@ -96,7 +95,7 @@ A Docker volume is a Docker-managed data storage area that exists outside the co
 
 To make it easier to understand, think of a Docker volume as a separate, dedicated external hard drive or USB stick that you connect to your computer. You can store important files on this external storage, and even if you replace your computer (equivalent to replacing a container), you can reconnect the external drive to access the same files. Multiple computers (containers) can also use the same external drive to share files.
 
-You can read more about container volume [here].(https://docs.docker.com/storage/volumes/)
+You can read more about container volume [here](https://docs.docker.com/storage/volumes/).
 
 #### Bind Mounts
 
