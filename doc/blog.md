@@ -76,11 +76,11 @@ Up to this point, I have been using the term Containers interchangeably with Con
 
 When you obtain a Container Image and execute it, a Container is started. The Container is the actual virtualized compute environment where the containerized app is run.
 
-It is also interesting to note that a container that is made for Linux kernel **might* be able to run on XNU (MacOS). This is due to the fact that Docker for Mac spins up an internal Linux Virtual Machine managed by the docker app [1](#references).
+It is also interesting to note that a container that is made for Linux kernel *might* be able to run on XNU (MacOS). This is due to the fact that Docker for Mac spins up an internal Linux Virtual Machine managed by the Docker app.
 
 #### Side notes
 
-A virtual machine is similar to a container but now it isolates the OS entirely, which means on 1 physical computer you can run multiple different OS with an isolated filesystem on top of your primary OS.
+A virtual machine is similar to a container but it isolates the OS entirely, which means on 1 physical computer you can run multiple different OS with an isolated filesystem on top of your primary OS.
 
 ![](https://upload.wikimedia.org/wikipedia/commons/0/0a/Docker-containerized-and-vm-transparent-bg.png)
 [*Image source*](https://commons.wikimedia.org/wiki/File:Docker-containerized-and-vm-transparent-bg.png)
