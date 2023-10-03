@@ -3,10 +3,13 @@
 <h2>Table of Content</h2>
 
 - [1. Introduction](#1-introduction)
-- [2. What even are containers and why do we use them?](#2-what-even-are-containers-and-why-do-we-use-them)
+- [2. What are containers and why do we use them?](#2-what-are-containers-and-why-do-we-use-them)
   - [Notes on OS Kernel isolation](#notes-on-os-kernel-isolation)
-  - [Containers vs Container Images](#containers-vs-container-images)
+  - [Containers vs. Container Images](#containers-vs-container-images)
     - [Side notes](#side-notes)
+  - [Container Storage](#container-storage)
+    - [Volumes](#volumes)
+    - [Bind Mounts](#bind-mounts)
   - [Benefits of using container](#benefits-of-using-container)
 - [3. Docker tutorial](#3-docker-tutorial)
   - [Explanations](#explanations)
@@ -25,29 +28,17 @@
   - [Good to know:](#good-to-know)
 - [Conclusion](#conclusion)
   - [Benefits of containers](#benefits-of-containers)
-  - [Benefits of Container Orchestration services (ECS, Kubernetes, etc)](#benefits-of-container-orchestration-services-ecs-kubernetes-etc)
-- [5. Acknowledgement](#5-acknowledgement)
+  - [Benefits of Container Orchestration services (ECS, Kubernetes, etc.)](#benefits-of-container-orchestration-services-ecs-kubernetes-etc)
+- [5. Acknowledgment](#5-acknowledgment)
 - [6. References](#6-references)
 
 ## 1. Introduction
 
-<p align="center">
-    <img src="https://cdn.sanity.io/images/v6v65cpt/production/b0160daf2ecb6b5ee3a91d0aa5f8df7e151c34b7-960x614.png" width=700>
-</p>
+As a software developer, we are expected to be able to quickly learn various softwares and tools besides programming languages to support our work. If you're someone like me who has some point has heard of a technology called "containers" and either did not know where to start, or found it too intimidating to even start using it, I hope this short article will help you get your feet wet.
 
-[*Figure 1: DevOps tech stack*](https://cdn.sanity.io/images/v6v65cpt/production/b0160daf2ecb6b5ee3a91d0aa5f8df7e151c34b7-960x614.png)
+## 2. What are containers and why do we use them?
 
-As a software developer, we are expected to be able to quickly learn various softwares and tools besides programming languages to support our work. If you're someone like me who at some point has heard of a technology called "containers" and either did not know where to start or found it too intimidating to even start using it, I hope this short article will help you get your feet wet.
-
-## 2. What even are containers and why do we use them?
-
-<p align="center">
-    <img src="https://img.freepik.com/free-photo/shipping-industry-delivering-cargo-large-container-ship-generative-ai_188544-9112.jpg?w=2000" width=700>
-</p>
-
-[*Image source*](https://img.freepik.com/free-photo/shipping-industry-delivering-cargo-large-container-ship-generative-ai_188544-9112.jpg?w=2000)
-
-If you do a quick Google search on "What are containers in software development?", it defines containers as "A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another" ([*1*](https://www.docker.com/resources/what-container/)). Now, I must admit that the definition is as concise as it gets, but to beginners, it is still a bit vague to imagine how the technology works and what the use cases for it. I believe it is easier to understand these concepts by going through a scenario.
+If you do a quick Google search on "What are containers in software development?", it defines containers as "A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another" ([*1*](https://www.docker.com/resources/what-container/)). Now, I must admit that the definition is as concise as it gets, but to beginners it is still a bit vague to imagine how the technology works and what the use cases for it. I believe it is easier to understand these concepts by going through a scenario.
 
 Imagine you are a Python data scientist working on a project. Your working machine has Python 3.10, with the packages (dependencies) `numpy==1.0.` and `pandas=1.7`. You got all your results and went ahead and handed them over to your supervisor to verify. The person clones your codes and attempts to run it on their machine, and an error pops up not even 2 seconds after running.
 
@@ -91,8 +82,28 @@ It is also interesting to note that a container that is made for Linux kernel **
 
 A virtual machine is similar to a container but now it isolates the OS entirely, which means on 1 physical computer you can run multiple different OS with an isolated filesystem on top of your primary OS.
 
-![](https://www.backblaze.com/blog/wp-content/uploads/2018/06/bb-bh-VMs-vs.-Containers-3.jpg)
-[*Image source*](https://www.backblaze.com/blog/wp-content/uploads/2018/06/bb-bh-VMs-vs.-Containers-3.jpg)
+![](https://upload.wikimedia.org/wikipedia/commons/0/0a/Docker-containerized-and-vm-transparent-bg.png)
+[*Image source*](https://commons.wikimedia.org/wiki/File:Docker-containerized-and-vm-transparent-bg.png)
+
+### Container Storage
+
+Containers themselves are ephemeral, which means they are shortlive, and when ever a container instance is terminated, any data generated during the lifecycle of the container will be lost. This is where a Container Storage comes into play.
+
+#### Volumes
+
+A Docker volume is a Docker-managed data storage area that exists outside the container's file system and is used to persist and share data between containers. Volumes are created and managed by Docker itself and are specifically designed to store data separately from containers. Docker volumes are an excellent choice when you need to preserve data even if a container is removed or replaced. Using volume is the preferred method for persisting files for Docker containers.
+
+To make it easier to understand, think of a Docker volume like a separate, dedicated external hard drive or USB stick that you connect to your computer. You can store important files on this external storage, and even if you replace your computer (equivalent to replacing a container), you can reconnect the external drive to access the same files. Multiple computers (containers) can also use the same external drive to share files.
+
+You can read more about container volumme [here].(https://docs.docker.com/storage/volumes/)
+
+#### Bind Mounts
+
+A bind mount, on the other hand, is a way to mount a directory or file from the host machine into a container. With a bind mount, you map a specific directory or file on the host to a directory inside the container. Any changes made to the mapped directory from either the host or the container are reflected in both places.
+
+Think of a bind mount as a window or portal between two rooms—one inside the container and one on the host machine. You can reach into the room through the window to change or access things on both sides. Changes made on one side are immediately visible on the other side of the window. You can read more about Bind Mount [here](https://docs.docker.com/storage/bind-mounts/).
+
+In my experience, I only use bind mount during development, testing and debugging on my **local machine** and **not in the final deployment on the cloud**. For example, when my scripts running inside the container need to make some API calls to AWS, it needs to be authenticated via my AWS profile. Now, I would not want to hardcode or even include that information in the container image because that would be a massive security vulnerability. What I would do instead was to bind mount the AWS credentials directory on my local directoy into the container so that it has access to that information **ONLY DURING LOCAL DEVELOPMENT TESTING**.
 
 ### Benefits of using container
 
@@ -208,10 +219,7 @@ After that is done, you can navigate to `localhost:8000` on your browser and see
 
 ## 4. Amazon ECS tutorial
 
-[Amazon ECS](https://aws.amazon.com/ecs/) is a container orchestrator service that allows you to automatically create, manage, and scale millions of containers for your microservice architecture. In the real world, millions of organizations build their services with containers since they are very maintainable and scalable. But the challenging aspect is to manage and scale millions of them automatically and gracefully handle disasters and service downtime. This is where container orchestrator like Amazon ECS comes into play.
-
-![](https://devopedia.org/images/article/37/8935.1530784562.jpg)
-*Figure 4: Example of container orchestrators* ([source](https://devopedia.org/images/article/37/8935.1530784562.jpg))
+[Amazon ECS](https://aws.amazon.com/ecs/) is a container orchestrator service that allow you to automatically create, manage and scale millions of containers for your microservice architecture. In the real world, millions of organizations build their services with containers since they are very maintainable and scalable. But the challenging aspect is to manage and scale millions of them automatically and gracefully handle disasters and service downtime. This is where container orchestrator like Amazon ECS comes into play.
 
 ### Prerequisites
 
@@ -356,3 +364,5 @@ I would like to express my immense gratitude to the [UBC Cloud Innovation Centre
 3. https://www.ibm.com/topics/container-orchestration
 4. General ECS Guide: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html
 5. General Docker Documentation: https://docs.docker.com/get-started/overview/
+6. Docker Volumes: https://docs.docker.com/storage/volumes/
+7. Bind Mounts: https://docs.docker.com/storage/bind-mounts/
