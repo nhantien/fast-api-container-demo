@@ -34,17 +34,18 @@
 
 ## 1. Introduction
 
-As a software developer, we are expected to be able to quickly learn various softwares and tools besides programming languages to support our work. If you're someone like me who has some point has heard of a technology called "containers" and either did not know where to start, or found it too intimidating to even start using it, I hope this short article will help you get your feet wet.
+As software developers, we are expected to be able to quickly learn various software and tools besides programming languages to support our work. If you're someone like me who has some point has heard of a technology called "containers" and either did not know where to start or found it too intimidating to even start using it, I hope this short article will help you get your feet wet. A quick disclaimer before we begin, the container technology that we will be dealing with is [Docker](https://docs.docker.com/get-started/overview/). 
+There are many other container software out there with close to similar underlying implementations, but we will go with Docker since it is the most popular (and battle-hardened).
 
 ## 2. What are containers and why do we use them?
 
-If you do a quick Google search on "What are containers in software development?", it defines containers as "A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another" ([*1*](https://www.docker.com/resources/what-container/)). Now, I must admit that the definition is as concise as it gets, but to beginners it is still a bit vague to imagine how the technology works and what the use cases for it. I believe it is easier to understand these concepts by going through a scenario.
+If you do a quick Google search on "What are containers in software development?", it defines containers as "A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another" ([*1*](https://www.docker.com/resources/what-container/)). Now, I must admit that the definition is as concise as it gets, but to beginners, it is still a bit vague to imagine how the technology works and what the use cases for it are. I believe it is easier to understand these concepts by going through a scenario.
 
 Imagine you are a Python data scientist working on a project. Your working machine has Python 3.10, with the packages (dependencies) `numpy==1.0.` and `pandas=1.7`. You got all your results and went ahead and handed them over to your supervisor to verify. The person clones your codes and attempts to run it on their machine, and an error pops up not even 2 seconds after running.
 
 "No way!" - you exclaimed, "It worked on my machine! I tested it 10 times!"
 
-Well, it turns out that your supervisor's machine (which is different from your own) is running Python 3.7, and certain features are deprecated, and certain of your codes are no longer compatible.
+Well, it turns out that your supervisor's machine (which is different from your own) is running Python 3.7, certain features are deprecated, and some parts of your codes are no longer compatible.
 
 "Easy, we're just going to upgrade to Python 3.10" - you said, and your supervisor reluctantly agreed.
 
@@ -62,7 +63,7 @@ To really nail down the fundamentals of a container, let's go through an analogy
 
 Let's say you want to cook a hard-boiled egg in your home's kitchen. Now you could just use all the kitchen tools in that kitchen, any eggs in the fridge, and cook your dish on the burner stovetop. But in order to cook the exact version of the dish (to the atomic scale), you decide to order a box that contains a specific type of egg (from a specific type of chicken, from a specific farm, you get the idea) instead of just any egg. The box also contains a specific type of pot that you want instead of any regular pot. After you have assembled everything provided to you inside that box, **you cook your stuff on your kitchen's stovetop**. The final dish will still be a boiled egg, but if you were to use the resources in your kitchen instead of the box, you would not arrive at that specific "version" of the disk.
 
-From the analogy, the box that contains the specific resources represents the container with their specified resources. The stovetop represents the OS kernel, since although you used particular resources to cook, you still cook it on your own kitchen's stovetop, instead of from a "containerized" stovetop. Your kitchen represents the entire OS.
+From the analogy, the box that contains the specific resources represents the container with its specified resources. The stovetop represents the OS kernel, since although you used particular resources to cook, you still cook it on your own kitchen's stovetop, instead of from a "containerized" stovetop. Your kitchen represents the entire OS.
 
 ### Notes on OS Kernel isolation
 
@@ -87,15 +88,15 @@ A virtual machine is similar to a container but now it isolates the OS entirely,
 
 ### Container Storage
 
-Containers themselves are ephemeral, which means they are shortlive, and when ever a container instance is terminated, any data generated during the lifecycle of the container will be lost. This is where a Container Storage comes into play.
+Containers themselves are ephemeral, which means they are short-lived, and whenever a container instance is terminated, any data generated during the lifecycle of the container will be lost. This is where Container Storage comes into play.
 
 #### Volumes
 
 A Docker volume is a Docker-managed data storage area that exists outside the container's file system and is used to persist and share data between containers. Volumes are created and managed by Docker itself and are specifically designed to store data separately from containers. Docker volumes are an excellent choice when you need to preserve data even if a container is removed or replaced. Using volume is the preferred method for persisting files for Docker containers.
 
-To make it easier to understand, think of a Docker volume like a separate, dedicated external hard drive or USB stick that you connect to your computer. You can store important files on this external storage, and even if you replace your computer (equivalent to replacing a container), you can reconnect the external drive to access the same files. Multiple computers (containers) can also use the same external drive to share files.
+To make it easier to understand, think of a Docker volume as a separate, dedicated external hard drive or USB stick that you connect to your computer. You can store important files on this external storage, and even if you replace your computer (equivalent to replacing a container), you can reconnect the external drive to access the same files. Multiple computers (containers) can also use the same external drive to share files.
 
-You can read more about container volumme [here].(https://docs.docker.com/storage/volumes/)
+You can read more about container volume [here].(https://docs.docker.com/storage/volumes/)
 
 #### Bind Mounts
 
@@ -103,7 +104,7 @@ A bind mount, on the other hand, is a way to mount a directory or file from the 
 
 Think of a bind mount as a window or portal between two rooms—one inside the container and one on the host machine. You can reach into the room through the window to change or access things on both sides. Changes made on one side are immediately visible on the other side of the window. You can read more about Bind Mount [here](https://docs.docker.com/storage/bind-mounts/).
 
-In my experience, I only use bind mount during development, testing and debugging on my **local machine** and **not in the final deployment on the cloud**. For example, when my scripts running inside the container need to make some API calls to AWS, it needs to be authenticated via my AWS profile. Now, I would not want to hardcode or even include that information in the container image because that would be a massive security vulnerability. What I would do instead was to bind mount the AWS credentials directory on my local directoy into the container so that it has access to that information **ONLY DURING LOCAL DEVELOPMENT TESTING**.
+In my experience, I only use bind mount during development, testing, and debugging on my **local machine** and **not in the final deployment on the cloud**. For example, when my scripts running inside the container need to make some API calls to AWS, they need to be authenticated via my AWS profile. Now, I would not want to hardcode or even include that information in the container image because that would be a massive security vulnerability. What I would do instead was to bind mount the AWS credentials directory on my local directory into the container so that it has access to that information **ONLY DURING LOCAL DEVELOPMENT TESTING**.
 
 ### Benefits of using container
 
@@ -111,13 +112,13 @@ There are many benefits of using containers:
 
 1. **Isolation**: Containers provide a high level of process and file system isolation. Each container runs in its own environment with its own file system, libraries, and dependencies. This isolation ensures that applications and services within containers do not interfere with each other.
 
-2. **Portability**: Containers (or to be more specific, Container Image)encapsulate applications and their dependencies, making them highly portable across different environments. Developers can create a containerized application on their local machine and be confident that it will run consistently in other environments, such as development, testing, and production.
+2. **Portability**: Containers (or to be more specific, Container Image) encapsulate applications and their dependencies, making them highly portable across different environments. Developers can create a containerized application on their local machine and be confident that it will run consistently in other environments, such as development, testing, and production.
 
 3. **Consistency**: Containers ensure consistency in the runtime environment. Since all dependencies are packaged within the container, you eliminate the "it works on my machine" problem. This consistency simplifies debugging and troubleshooting.
 
 4. **Scalability**: Containers are lightweight and can be quickly started and stopped. This makes it easy to scale applications up or down in response to changing workloads. Container orchestration tools like Kubernetes help automate scaling and load balancing.
 
-5. **Registry and Version Control**: Container Images can be stored on an image registry (Dockerhub, Amazon ECR), where you can share your images with others and they can pull and deploy your images on their computer.
+5. **Registry and Version Control**: Container Images can be stored on an image registry (Dockerhub, Amazon ECR), where you can share your images with others and they can pull and deploy your images on their computer. Your images can be tags, which represent different revisions of the images, and your user can pull a specific version according to their need.
 
 ## 3. Docker tutorial
 
@@ -173,7 +174,7 @@ CMD [ "uvicorn", "application:app", "--port", "8000" , "--host", "0.0.0.0" ]
 ### Explanations
 
 1. `FROM --platform=linux/amd64 python:slim`: 
-A Dockerfile always starts with a `FROM` instruction, which tells Docker the base container image that your image is building on top. This is due to the fact that the Docker container utilized something called **layers**. Every instruction after `FROM` (`WORKDIR`, `COPY`, etc) creates new layers on top of the previous layers. Imagine a stack where the bottom-most is the `FROM` instruction. This allows Docker to cache existing layers and prevents you from building a brand new image every single time you make a tiny change. If you change an instruction, then it and every instruction downstream (below) have to be re-executed (thus those layers are rebuilt), which will take A LOT OF TIME. Consequently, if you already built the image from the Dockerfile and immediately rebuilt, nothing will be executed because all of those instructions are unchanged (assuming the instructions in the Dockerfile are unchanged). Here, `python:slim` is pointing to a specific Docker official base image for Python with the tag `slim`. The indicator `--platform=linux/amd64` means that the docker image being built is intended to be run on a Linux machine. However, I personally run it fine on my Macbook. If you're on Windows and find yourself running into trouble, try getting rid of that indicator and rebuild your image.
+A Dockerfile always starts with a `FROM` instruction, which tells Docker the base container image that your image is building on top. This is due to the fact that the Docker container utilized something called **layers**. Every instruction after `FROM` (`WORKDIR`, `COPY`, etc) creates new layers on top of the previous layers. Imagine a stack where the bottom-most is the `FROM` instruction. This allows Docker to cache existing layers and prevents you from building a brand new image every single time you make a tiny change. If you change an instruction, then it and every instruction downstream (below) have to be re-executed (thus those layers are rebuilt), which will take A LOT OF TIME. Consequently, if you already built the image from the Dockerfile and immediately rebuilt it, nothing will be executed because all of those instructions are unchanged (assuming the instructions in the Dockerfile are unchanged). Here, `python:slim` is pointing to a specific Docker official base image for Python with the tag `slim`. The indicator `--platform=linux/amd64` means that the docker image being built is intended to be run on a Linux machine. However, I personally run it fine on my Macbook. If you're on Windows and find yourself running into trouble, try getting rid of that indicator and rebuild your image.
 
 2. `WORKDIR /usr/src/app`:
 This is equivalent to a `cd` command in Bash. It basically says to navigate to a directory `/usr/src/app`. If that directory does not exist inside the container, it will be created. Then it sets the current working directory inside the container to be that directory.
@@ -219,7 +220,7 @@ After that is done, you can navigate to `localhost:8000` on your browser and see
 
 ## 4. Amazon ECS tutorial
 
-[Amazon ECS](https://aws.amazon.com/ecs/) is a container orchestrator service that allow you to automatically create, manage and scale millions of containers for your microservice architecture. In the real world, millions of organizations build their services with containers since they are very maintainable and scalable. But the challenging aspect is to manage and scale millions of them automatically and gracefully handle disasters and service downtime. This is where container orchestrator like Amazon ECS comes into play.
+[Amazon ECS](https://aws.amazon.com/ecs/) is a container orchestrator service that allows you to automatically create, manage, and scale millions of containers for your microservice architecture. In the real world, millions of organizations build their services with containers since they are very maintainable and scalable. But the challenging aspect is to manage and scale millions of them automatically and gracefully handle disasters and service downtime. This is where container orchestrator like Amazon ECS comes into play.
 
 ### Prerequisites
 
@@ -301,12 +302,10 @@ When it shows green:
 
 To stop clean-up, simply stop the Service, then delete the associated Cluster and Task Definition. Then go to ECR and delete the repository.
 
-### Congratulation!!!
-
 ### Good to know:
 
 - *Service* vs *Task*:
-  - A Task is an abstraction over a group of containers doing a computation task. Think of it as similar to a Lambda Function but has a longer timeout, in fact, it has no timeout limit, It exits when an error occurs when the script you're running finished executing, or you abort the execution manually. It's suitable for a periodical, short-term task like fetching data from an API and storing it in a database.
+  - A Task is an abstraction over a group of containers doing a computation task. Think of it as similar to a Lambda Function but has a longer timeout, in fact, it has no timeout limit, It exits when an error occurs when the script you're running finishes executing, or you abort the execution manually. It's suitable for a periodical, short-term task like fetching data from an API and storing it in a database.
   - A Service can be thought of as a long-running/long-term Task. It's suitable for web servers where it needs to be constantly run 24/7.
 
 - *Fargate* vs *EC2* launch type:
@@ -333,7 +332,7 @@ To sum it all up, here are all the benefits of containers and container orchestr
 
 6. **Microservices**: Containers are a natural fit for microservices architectures, where applications are broken into smaller, independently deployable services. Each service can run in its own container, simplifying deployment and scaling.
 
-### Benefits of Container Orchestration services (ECS, Kubernetes, etc.)
+### Benefits of Container Orchestration services (ECS, etc.)
 
 1. **Orchestration**: Container orchestrators automate the deployment, scaling, and management of containerized applications. They ensure that containers are placed on the appropriate nodes, monitor their health, and replace failed containers.
 
